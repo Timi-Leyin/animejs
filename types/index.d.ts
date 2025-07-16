@@ -548,6 +548,74 @@ type AnimatablePropertyParamsOptions = {
     composition?: TweenComposition;
 };
 type AnimatableParams = Record<string, TweenParamValue | EasingParam | TweenModifier | TweenComposition | AnimatablePropertyParamsOptions> & AnimatablePropertyParamsOptions;
+declare class WAAPIAnimation {
+    constructor(targets: DOMTargetsParam, params: WAAPIAnimationParams);
+    targets: DOMTargetsArray;
+    animations: Array<globalThis.Animation>;
+    controlAnimation: globalThis.Animation;
+    onComplete: Callback<this>;
+    duration: number;
+    muteCallbacks: boolean;
+    completed: boolean;
+    paused: boolean;
+    reversed: boolean;
+    autoplay: boolean | ScrollObserver;
+    _speed: number;
+    _resolve: Function;
+    _completed: number;
+    _inlineStyles: Array<any>;
+    forEach(callback: string | ((animation: globalThis.Animation) => any)): this;
+    set speed(arg: number);
+    get speed(): number;
+    set currentTime(arg: number);
+    get currentTime(): number;
+    set progress(arg: number);
+    get progress(): number;
+    resume(): this;
+    pause(): this;
+    alternate(): this;
+    play(): this;
+    reverse(): this;
+    seek(time: number, muteCallbacks?: boolean): this;
+    restart(): this;
+    commitStyles(): this;
+    complete(): this;
+    cancel(): this;
+    revert(): this;
+    then(callback?: WAAPICallback): Promise<any>;
+}
+declare namespace waapi {
+    export function animate(targets: DOMTargetsParam, params: WAAPIAnimationParams): WAAPIAnimation;
+    export { easingToLinear as convertEase };
+}
+type WAAPITweenValue = string | number | Array<string> | Array<number>;
+type WAAPIFunctionvalue = (target: DOMTarget, index: number, length: number) => WAAPITweenValue;
+type WAAPIKeyframeValue = WAAPITweenValue | WAAPIFunctionvalue | Array<string | number | WAAPIFunctionvalue>;
+type WAAPICallback = (animation: WAAPIAnimation) => void;
+type WAAPITweenOptions = {
+    to?: WAAPIKeyframeValue;
+    from?: WAAPIKeyframeValue;
+    duration?: number | WAAPIFunctionvalue;
+    delay?: number | WAAPIFunctionvalue;
+    ease?: EasingParam;
+    composition?: CompositeOperation;
+};
+type WAAPIAnimationOptions = {
+    loop?: number | boolean;
+    Reversed?: boolean;
+    Alternate?: boolean;
+    autoplay?: boolean | ScrollObserver;
+    playbackRate?: number;
+    duration?: number | WAAPIFunctionvalue;
+    delay?: number | WAAPIFunctionvalue;
+    ease?: EasingParam;
+    composition?: CompositeOperation;
+    onComplete?: WAAPICallback;
+};
+type WAAPIAnimationParams = Record<string, WAAPIKeyframeValue | WAAPIAnimationOptions | boolean | ScrollObserver | WAAPICallback | EasingParam | WAAPITweenOptions> & WAAPIAnimationOptions;
+declare function easingToLinear(fn: EasingFunction, samples?: number): string;
+type WAAPIAnimationParams = WAAPIAnimationParams;
+type TimePosition = TimePosition;
 declare class Draggable {
     constructor(target: TargetsParam, parameters?: DraggableParams);
     containerArray: number[];
@@ -954,70 +1022,4 @@ type SpringParams = {
     damping?: number;
     velocity?: number;
 };
-declare class WAAPIAnimation {
-    constructor(targets: DOMTargetsParam, params: WAAPIAnimationParams);
-    targets: DOMTargetsArray;
-    animations: Array<globalThis.Animation>;
-    controlAnimation: globalThis.Animation;
-    onComplete: Callback<this>;
-    duration: number;
-    muteCallbacks: boolean;
-    completed: boolean;
-    paused: boolean;
-    reversed: boolean;
-    autoplay: boolean | ScrollObserver;
-    _speed: number;
-    _resolve: Function;
-    _completed: number;
-    _inlineStyles: Array<any>;
-    forEach(callback: string | ((animation: globalThis.Animation) => any)): this;
-    set speed(arg: number);
-    get speed(): number;
-    set currentTime(arg: number);
-    get currentTime(): number;
-    set progress(arg: number);
-    get progress(): number;
-    resume(): this;
-    pause(): this;
-    alternate(): this;
-    play(): this;
-    reverse(): this;
-    seek(time: number, muteCallbacks?: boolean): this;
-    restart(): this;
-    commitStyles(): this;
-    complete(): this;
-    cancel(): this;
-    revert(): this;
-    then(callback?: WAAPICallback): Promise<any>;
-}
-declare namespace waapi {
-    export function animate(targets: DOMTargetsParam, params: WAAPIAnimationParams): WAAPIAnimation;
-    export { easingToLinear as convertEase };
-}
-type WAAPITweenValue = string | number | Array<string> | Array<number>;
-type WAAPIFunctionvalue = (target: DOMTarget, index: number, length: number) => WAAPITweenValue;
-type WAAPIKeyframeValue = WAAPITweenValue | WAAPIFunctionvalue | Array<string | number | WAAPIFunctionvalue>;
-type WAAPICallback = (animation: WAAPIAnimation) => void;
-type WAAPITweenOptions = {
-    to?: WAAPIKeyframeValue;
-    from?: WAAPIKeyframeValue;
-    duration?: number | WAAPIFunctionvalue;
-    delay?: number | WAAPIFunctionvalue;
-    ease?: EasingParam;
-    composition?: CompositeOperation;
-};
-type WAAPIAnimationOptions = {
-    loop?: number | boolean;
-    Reversed?: boolean;
-    Alternate?: boolean;
-    autoplay?: boolean | ScrollObserver;
-    playbackRate?: number;
-    duration?: number | WAAPIFunctionvalue;
-    delay?: number | WAAPIFunctionvalue;
-    ease?: EasingParam;
-    composition?: CompositeOperation;
-    onComplete?: WAAPICallback;
-};
-type WAAPIAnimationParams = Record<string, WAAPIKeyframeValue | WAAPIAnimationOptions | boolean | ScrollObserver | WAAPICallback | EasingParam | WAAPITweenOptions> & WAAPIAnimationOptions;
-declare function easingToLinear(fn: EasingFunction, samples?: number): string;
-export { engine, utils, svg, stagger, eases, DefaultsParams, Renderable, Tickable, CallbackArgument, Revertible, DraggableAxisParam, DraggableCursorParams, DraggableParams, DrawableSVGGeometry, EasingFunction, EaseStringParamNames, EasingParam, DOMTarget, JSTarget, Target, TargetSelector, DOMTargetSelector, DOMTargetsParam, DOMTargetsArray, JSTargetsParam, JSTargetsArray, TargetsParam, TargetsArray, FunctionValue, TweenModifier, ColorArray, Callback, TickableCallbacks, RenderableCallbacks, Tween, TweenDecomposedValue, TweenPropertySiblings, TweenLookups, TweenReplaceLookups, TweenAdditiveLookups, TimerOptions, TimerParams, TweenParamValue, TweenPropValue, TweenComposition, TweenParamsOptions, TweenValues, TweenKeyValue, ArraySyntaxValue, TweenOptions, TweenObjectValue, PercentageKeyframeOptions, PercentageKeyframeParams, PercentageKeyframes, DurationKeyframes, AnimationOptions, AnimationParams, TimelineOptions, TimelineParams, AnimatablePropertySetter, AnimatablePropertyGetter, AnimatableProperty, AnimatableObject, AnimatablePropertyParamsOptions, AnimatableParams, createTimer, Timer, animate, JSAnimation, createTimeline, Timeline, createAnimatable, Animatable, createDraggable, Draggable, createScope, Scope, onScroll, ScrollObserver, scrollContainers, createSpring, Spring, waapi, WAAPIAnimation };
+export { engine, utils, svg, stagger, eases, DefaultsParams, Renderable, Tickable, CallbackArgument, Revertible, DraggableAxisParam, DraggableCursorParams, DraggableParams, DrawableSVGGeometry, EasingFunction, EaseStringParamNames, EasingParam, DOMTarget, JSTarget, Target, TargetSelector, DOMTargetSelector, DOMTargetsParam, DOMTargetsArray, JSTargetsParam, JSTargetsArray, TargetsParam, TargetsArray, FunctionValue, TweenModifier, ColorArray, Callback, TickableCallbacks, RenderableCallbacks, Tween, TweenDecomposedValue, TweenPropertySiblings, TweenLookups, TweenReplaceLookups, TweenAdditiveLookups, TimerOptions, TimerParams, TweenParamValue, TweenPropValue, TweenComposition, TweenParamsOptions, TweenValues, TweenKeyValue, ArraySyntaxValue, TweenOptions, TweenObjectValue, PercentageKeyframeOptions, PercentageKeyframeParams, PercentageKeyframes, DurationKeyframes, AnimationOptions, AnimationParams, TimelineOptions, TimelineParams, AnimatablePropertySetter, AnimatablePropertyGetter, AnimatableProperty, AnimatableObject, AnimatablePropertyParamsOptions, AnimatableParams, WAAPIAnimationParams, TimePosition, createTimer, Timer, animate, JSAnimation, createTimeline, Timeline, createAnimatable, Animatable, createDraggable, Draggable, createScope, Scope, onScroll, ScrollObserver, scrollContainers, createSpring, Spring, waapi, WAAPIAnimation };
